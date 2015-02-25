@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 //#include <libnotify/notify.h> 
+
+
 void register_events(xcb_connection_t * connection, xcb_window_t * root_window) {
     uint32_t mask               = XCB_CW_EVENT_MASK;
     uint32_t values[1]          = { XCB_EVENT_MASK_KEYMAP_STATE };
@@ -22,12 +24,16 @@ void get_keymap_name(xcb_connection_t * connection, char ** keymap_name) {
     xcb_query_keymap_cookie_t cookie;
     xcb_query_keymap_reply_t * reply = NULL;
     cookie = xcb_query_keymap(connection);
-    reply = xcb_query_keymap_reply(connection, cookie, NULL);
-    if (reply) {
+    xcb_generic_error_t * err = NULL;
+    reply = xcb_query_keymap_reply(connection, cookie, &err);
+    if (err) {
+        fprintf(stderr, "Failed to query keymap state.\n");
+    }  else  {
         int i = 0;
         for (i = 0; i < 32; i++) {
-            printf("%x\n", reply->keys[i]);
+            printf("%x ", reply->keys[i]);
         }
+        printf("\n");
         free(reply);
     }
 }
