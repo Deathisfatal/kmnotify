@@ -1,0 +1,7 @@
+cmake_minimum_required (VERSION 3.0)
+project (kmnotify)
+add_executable(kmnotify main.c)
+target_link_libraries(kmnotify xcb notify)
+set(CMAKE_C_COMPILER    "/usr/bin/clang")
+set(CMAKE_C_FLAGS       "-Wall -std=c99")
+include_directories(/usr/include/glib-2.0/)
