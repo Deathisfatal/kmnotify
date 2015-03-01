@@ -33,6 +33,7 @@ void event_loop(xcb_connection_t * connection) {
 
 int main(int argc, char * argv[]) {
     initialise_notifications();
+    initialise_xcb_connection();
     xcb_screen_t        * screen        = NULL;
     xcb_connection_t    * connection    = NULL;
     connection = xcb_connect( NULL, NULL );
