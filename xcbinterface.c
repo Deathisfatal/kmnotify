@@ -77,3 +77,12 @@ void get_keymap_name(xcb_connection_t * connection, char ** keymap_name) {
     }
     *keymap_name = "x";
 }
+
+xcb_connection_t * initialise_xcb( ) {
+    return xcb_connect( NULL, NULL );
+}
+
+xcb_window_t get_root_window(xcb_connection_t * connection) {
+    xcb_screen_t * screen = xcb_setup_roots_iterator(xcb_get_setup(connection)).data;
+    return screen->root;
+}

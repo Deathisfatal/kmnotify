@@ -6,6 +6,6 @@
 extern void initialise_xkb(xcb_connection_t * connection);
 extern void register_events(xcb_connection_t * connection, xcb_window_t * root_window);
 extern void get_keymap_name(xcb_connection_t * connection, char ** keymap_name);
-extern void initialise_xcb_connection(xcb_connection_t * connection);
+extern xcb_connection_t * initialise_xcb();
 extern xcb_window_t get_root_window(xcb_connection_t * connection);
 #endif

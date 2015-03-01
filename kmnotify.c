@@ -33,12 +33,8 @@ void event_loop(xcb_connection_t * connection) {
 
 int main(int argc, char * argv[]) {
     initialise_notifications();
-    initialise_xcb_connection();
-    xcb_screen_t        * screen        = NULL;
-    xcb_connection_t    * connection    = NULL;
-    connection = xcb_connect( NULL, NULL );
-    screen = xcb_setup_roots_iterator(xcb_get_setup(connection)).data;
-    xcb_window_t root_window = screen->root;
+    xcb_connection_t * connection = initialise_xcb();
+    xcb_window_t root_window = get_root_window(connection);
     initialise_xkb(connection);
     register_events(connection, &root_window);
     event_loop(connection);
