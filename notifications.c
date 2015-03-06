@@ -27,7 +27,7 @@ void show_notification(const char * message) {
     }
     /* Close old notification and reuse */
     notify_notification_close(notification, NULL);
-    notify_notification_update(notification, message, "Keyboard layout updated",NULL);
+    notify_notification_update(notification, message, "Keyboard layout changed",NULL);
     GError * err = NULL;
     gboolean show_result = notify_notification_show(notification, &err);
     if (!show_result) {
