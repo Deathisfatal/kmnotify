@@ -23,8 +23,8 @@ void initialise_notifications() {
 void show_notification(const char * message) {
     if (notification == NULL) {
         notification = notify_notification_new(NULL, NULL, NULL);
-	    notify_notification_set_urgency(notification, NOTIFY_URGENCY_LOW);
-	    notify_notification_set_timeout(notification, NOTIFY_TIMEOUT);
+        notify_notification_set_urgency(notification, NOTIFY_URGENCY_LOW);
+        notify_notification_set_timeout(notification, NOTIFY_TIMEOUT);
     }
     /* Close old notification and reuse */
     notify_notification_close(notification, NULL);
