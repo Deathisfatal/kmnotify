@@ -7,16 +7,9 @@
 
 void handle_keymap_notify_event(xcb_connection_t * connection, xcb_generic_event_t * event) {
 //    xcb_keymap_notify_event_t * km_event    = (xcb_keymap_notify_event_t *) event;
-    char * keymap_name = NULL;
-    get_keymap_name(connection, &keymap_name);
-//    printf("Keymap change detected! New keymap: %s\n", keymap_name);
-    char * base_text = "New keyboard layout: ";
-    size_t text_length = strlen(keymap_name) + strlen(base_text) + 1;
-    char * notification_text = (char *) calloc(text_length, sizeof(char));
-    sprintf(notification_text, "%s%s", base_text, keymap_name);
-    show_notification("New keyboard layout:");
-    //free(keymap_name);
-    free(notification_text);
+    char * keymap_name = get_keymap_name(connection);
+    show_notification(keymap_name);
+    free(keymap_name);
 }
 
 void event_loop(xcb_connection_t * connection) {
@@ -34,9 +27,8 @@ void event_loop(xcb_connection_t * connection) {
 int main(int argc, char * argv[]) {
     initialise_notifications();
     xcb_connection_t * connection = initialise_xcb();
-    xcb_window_t root_window = get_root_window(connection);
     initialise_xkb(connection);
-    register_events(connection, &root_window);
+    register_events(connection);
     event_loop(connection);
     xcb_disconnect(connection);
     deinitialise_notifications();

@@ -28,11 +28,12 @@ void initialise_xkb(xcb_connection_t * connection) {
     free(reply);
 }
 
-void register_events(xcb_connection_t * connection, xcb_window_t * root_window) {
+void register_events(xcb_connection_t * connection) {
+	xcb_window_t root_window = get_root_window(connection);
     uint32_t mask               = XCB_CW_EVENT_MASK;
     uint32_t values[1]          = { XCB_EVENT_MASK_KEYMAP_STATE };
     xcb_void_cookie_t cookie    = xcb_change_window_attributes_checked(connection, 
-            *root_window, mask, values);
+            root_window, mask, values);
     xcb_generic_error_t * err   = xcb_request_check(connection, cookie);
     if (err != NULL) {
         print_xcb_error(err);
@@ -43,39 +44,33 @@ void register_events(xcb_connection_t * connection, xcb_window_t * root_window) 
     xcb_flush(connection); /* Necessary? */
 }
 
-int16_t get_keyboard_id(xcb_connection_t * connection) {
-    xcb_xkb_get_device_info_cookie_t cookie = xcb_xkb_get_device_info(connection, 
-        XCB_XKB_ID_USE_CORE_KBD, 0, 0, 0, 0, 0, 0);
-    xcb_generic_error_t * err           = NULL;
-    xcb_xkb_get_device_info_reply_t * reply = xcb_xkb_get_device_info_reply(connection, cookie, &err);
-    if (!reply) {
-        printf("XXX");
-    }
-    if (err) {
-        print_xcb_error(err);
-        fprintf(stderr, "Failed to get core keyboard ID.\n");
-        free(err);
-        return -1;
-    } else {
-        uint8_t device_id = reply->deviceID;
-        free(reply);
-        return device_id;
-    }
+xkb_layout_index_t get_active_layout_index(xcb_connection_t * connection, int32_t keyboard_id, struct xkb_keymap * keymap) {
+	struct xkb_state * state = xkb_x11_state_new_from_device(keymap, connection, keyboard_id);
+	xkb_layout_index_t num_layouts = xkb_keymap_num_layouts (keymap);
+	xkb_layout_index_t index = 0;
+	for (xkb_layout_index_t i = 0; i < num_layouts; i++) {
+		int is_active = xkb_state_layout_index_is_active(state, i, XKB_STATE_LAYOUT_EFFECTIVE);
+		if (is_active == 1) {
+			index = i;
+			break;
+		}
+	}
+	xkb_state_unref(state);
+	return index;
 }
 
-void get_keymap_name(xcb_connection_t * connection, char ** keymap_name) {
-    xcb_query_keymap_cookie_t cookie    = xcb_query_keymap(connection);
-    xcb_generic_error_t * err           = NULL;
-    xcb_query_keymap_reply_t * reply    = xcb_query_keymap_reply(connection, 
-            cookie, &err);
-    int16_t keyboard_id = get_keyboard_id(connection);
-    printf("%d\n", keyboard_id);
-    if (err) {
-        fprintf(stderr, "Failed to query keymap state.\n");
-    }  else  {
-        free(reply);
-    }
-    *keymap_name = "x";
+
+char * get_keymap_name(xcb_connection_t * connection) {
+	struct xkb_context * context = xkb_context_new(0);
+    int32_t keyboard_id = xkb_x11_get_core_keyboard_device_id(connection);
+    struct xkb_keymap * keymap = xkb_x11_keymap_new_from_device(context, connection, keyboard_id,0);
+	xkb_layout_index_t active_layout = get_active_layout_index(connection, keyboard_id, keymap); 
+    const char * keymap_name = xkb_keymap_layout_get_name(keymap, active_layout);
+    char * return_name = (char *)calloc(strlen(keymap_name), sizeof(char));
+    strcpy(return_name, keymap_name);
+    xkb_context_unref(context);
+    xkb_keymap_unref(keymap);
+    return return_name;
 }
 
 xcb_connection_t * initialise_xcb( ) {
