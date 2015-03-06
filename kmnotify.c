@@ -12,6 +12,21 @@
 #include <string.h>
 #include "notifications.h"
 #include "xcbinterface.h"
+#include <signal.h>
+
+static xcb_connection_t * connection = NULL;
+static uint8_t run_loop = 1;
+
+void cleanup() {
+    run_loop = 0;
+    xcb_disconnect(connection);
+    deinitialise_notifications();
+    exit(0);
+}
+
+void handle_sigint(int dummy) {
+    cleanup();
+}
 
 void handle_keymap_notify_event(xcb_connection_t * connection, xcb_generic_event_t * event) {
 //    xcb_keymap_notify_event_t * km_event    = (xcb_keymap_notify_event_t *) event;
@@ -23,7 +38,7 @@ void handle_keymap_notify_event(xcb_connection_t * connection, xcb_generic_event
 void event_loop(xcb_connection_t * connection) {
     xcb_generic_event_t * event     = NULL;
     printf("Waiting for events...\n");
-    while ((event = xcb_wait_for_event(connection))) {
+    while (run_loop && (event = xcb_wait_for_event(connection))) {
         uint32_t response_type = event->response_type & ~0x80; /* is this bitmask necessary?*/
         if (response_type == XCB_KEYMAP_NOTIFY) {
             handle_keymap_notify_event(connection, event);            
@@ -33,13 +48,13 @@ void event_loop(xcb_connection_t * connection) {
 }
 
 int main(int argc, char * argv[]) {
+    signal(SIGINT, handle_sigint);
     initialise_notifications();
-    xcb_connection_t * connection = initialise_xcb();
+    connection = initialise_xcb();
     initialise_xkb(connection);
     register_events(connection);
     event_loop(connection);
-    xcb_disconnect(connection);
-    deinitialise_notifications();
+    cleanup();
     return 0;
 }
 

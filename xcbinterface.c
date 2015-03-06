@@ -74,7 +74,7 @@ char * get_keymap_name(xcb_connection_t * connection) {
     struct xkb_keymap * keymap = xkb_x11_keymap_new_from_device(context, connection, keyboard_id,0);
 	xkb_layout_index_t active_layout = get_active_layout_index(connection, keyboard_id, keymap); 
     const char * keymap_name = xkb_keymap_layout_get_name(keymap, active_layout);
-    char * return_name = (char *)calloc(strlen(keymap_name), sizeof(char));
+    char * return_name = (char *)calloc(strlen(keymap_name), sizeof(char) + 1);
     strcpy(return_name, keymap_name);
     xkb_context_unref(context);
     xkb_keymap_unref(keymap);
