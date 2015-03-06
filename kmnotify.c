@@ -36,7 +36,7 @@ void handle_keymap_notify_event(xcb_connection_t * connection) {
 void event_loop(xcb_connection_t * connection) {
     xcb_generic_event_t * event     = NULL;
     printf("Waiting for events...\n");
-    while (event = xcb_wait_for_event(connection)) {
+    while ((event = xcb_wait_for_event(connection))) {
         uint32_t response_type = event->response_type & ~0x80; /* is this bitmask necessary?*/
         free(event);
         if (response_type == XCB_KEYMAP_NOTIFY) {
