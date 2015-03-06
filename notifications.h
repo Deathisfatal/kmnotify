@@ -1,7 +1,7 @@
 /*******
  * notifications.h
  *******
- * isaac.true@gmail.com
+ * isaac@is.having.coffee
  *
  * libnotify interface header
  */ 

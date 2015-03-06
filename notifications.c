@@ -1,7 +1,7 @@
 /*******
  * notifications.c
  *******
- * isaac.true@gmail.com
+ * isaac@is.having.coffee
  *
  * libnotify interface
  */ 

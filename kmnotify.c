@@ -1,7 +1,7 @@
 /*******
  * kmnotify.c
  *******
- * isaac.true@gmail.com
+ * isaac@is.having.coffee
  *
  * Source for main sections of code
  */ 

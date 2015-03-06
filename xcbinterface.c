@@ -1,7 +1,7 @@
 /*******
  * xcbinterface.c
  *******
- * isaac.true@gmail.com
+ * isaac@is.having.coffee
  *
  * xcb interface
  */ 
