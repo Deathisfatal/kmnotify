@@ -1,3 +1,11 @@
+/*******
+ * kmnotify.c
+ *******
+ * isaac.true@gmail.com
+ *
+ * Source for main sections of code
+ */ 
+
 #include <xcb/xcb.h>
 #include <stdio.h>
 #include <stdlib.h>

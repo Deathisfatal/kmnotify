@@ -1,3 +1,11 @@
+/*******
+ * xcbinterface.h
+ *******
+ * isaac.true@gmail.com
+ *
+ * xcb interface header
+ */ 
+
 #ifndef __XCBINTERFACE_H__
 #define __XCBINTERFACE_H__
 

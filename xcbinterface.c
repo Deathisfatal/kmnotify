@@ -1,3 +1,11 @@
+/*******
+ * xcbinterface.c
+ *******
+ * isaac.true@gmail.com
+ *
+ * xcb interface
+ */ 
+
 #include "xcbinterface.h"
 #include <xkbcommon/xkbcommon-x11.h>
 #include <xcb/xkb.h>
