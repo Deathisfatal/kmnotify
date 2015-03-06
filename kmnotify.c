@@ -15,6 +15,7 @@
 #include <signal.h>
 
 static xcb_connection_t * connection = NULL;
+static char * last_keymap_name = NULL;
 
 
 void cleanup() {
@@ -29,8 +30,19 @@ void handle_sigint(int dummy) {
 
 void handle_keymap_notify_event(xcb_connection_t * connection) {
     char * keymap_name = get_keymap_name(connection);
-    show_notification(keymap_name);
-    free(keymap_name);
+    /* Check if new keymap name is different to the previous. If it is different,
+       replace last_keymap_name with the new keymap_name, free the old one, and show
+       the notification. Otherwise, free the new name and do nothing.
+    */
+    if (last_keymap_name == NULL || strncmp(keymap_name, last_keymap_name, strlen(keymap_name))) {
+        if (last_keymap_name != NULL) {
+            free(last_keymap_name);
+        }
+        last_keymap_name = keymap_name;
+        show_notification(keymap_name);
+    } else {
+        free(keymap_name);
+    }
 }
 
 void event_loop(xcb_connection_t * connection) {
@@ -50,6 +62,7 @@ int main(int argc, char * argv[]) {
     initialise_notifications();
     connection = initialise_xcb();
     initialise_xkb(connection);
+    last_keymap_name = get_keymap_name(connection);
     register_events(connection);
     event_loop(connection);
     cleanup();
