@@ -34,10 +34,8 @@ void handle_keymap_notify_event(xcb_connection_t * connection) {
        replace last_keymap_name with the new keymap_name, free the old one, and show
        the notification. Otherwise, free the new name and do nothing.
     */
-    if (last_keymap_name == NULL || strncmp(keymap_name, last_keymap_name, strlen(keymap_name))) {
-        if (last_keymap_name != NULL) {
-            free(last_keymap_name);
-        }
+    if (strncmp(keymap_name, last_keymap_name, strlen(keymap_name))) {
+        free(last_keymap_name);
         last_keymap_name = keymap_name;
         show_notification(keymap_name);
     } else {
