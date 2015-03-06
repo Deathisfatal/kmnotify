@@ -1,11 +1,10 @@
 cmake_minimum_required (VERSION 3.0)
 project (kmnotify)
 find_package(PkgConfig REQUIRED)
-find_package (Threads)
 pkg_check_modules(DEPS xcb-xkb libnotify xkbcommon-x11)
 link_directories(${DEPS_LIBRARY_DIRS})
 include_directories(${DEPS_INCLUDE_DIRS})
 set(CMAKE_C_FLAGS "-Wall -std=c99 ")
 add_executable(kmnotify kmnotify.c notifications.c xcbinterface.c)
-target_link_libraries(kmnotify ${CMAKE_THREAD_LIBS_INIT} ${DEPS_LIBRARIES})
+target_link_libraries(kmnotify ${DEPS_LIBRARIES})
  
