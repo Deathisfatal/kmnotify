@@ -9,7 +9,7 @@
 #ifndef __NOTIFICATIONS_H__
 #define __NOTIFICATIONS_H__
 
-#define NOTIFY_TIMEOUT 1000
+#define NOTIFY_TIMEOUT 100
 
 extern void initialise_notifications();
 extern void deinitialise_notifications();
