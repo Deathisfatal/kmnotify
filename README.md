@@ -22,7 +22,7 @@ make && sudo make install
 ### Debian
 ```sh
 # Add the repository and accompanying signing key
-echo "deb http://deb.having.coffee/debian contrib" | sudo tee /etc/apt/sources.list.d/having.coffee.list 
+echo "deb http://deb.having.coffee/debian testing contrib" | sudo tee /etc/apt/sources.list.d/having.coffee.list 
 wget -O - http://deb.having.coffee/debian/conf/ijt-repo.gpg.key | sudo apt-key add -
 # Update package lists and install
 sudo aptitude update
