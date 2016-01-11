@@ -19,5 +19,14 @@ cd kmnotify-1.0.1
 cmake .
 make && sudo make install
 ```
+### Debian
+```
+# Add the repository and accompanying signing key
+echo "deb http://deb.having.coffee/debian contrib" | sudo tee /etc/apt/sources.list.d/having.coffee.list 
+wget -O - http://deb.having.coffee/debian/conf/ijt-repo.gpg.key | sudo apt-key add -
+# Update package lists and install
+sudo aptitude update
+sudo aptitude install kmnotify
+```
 
 
