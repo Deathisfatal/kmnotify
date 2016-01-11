@@ -12,7 +12,7 @@ Set to autostart with your window manager to have the program watch for keyboard
 
 ## Installation
 ### From source
-```
+```sh
 wget https://github.com/IsaacJT/kmnotify/archive/v1.0.1.tar.gz
 tar xvf kmnotify-1.0.1.tar.gz
 cd kmnotify-1.0.1
@@ -20,7 +20,7 @@ cmake .
 make && sudo make install
 ```
 ### Debian
-```
+```sh
 # Add the repository and accompanying signing key
 echo "deb http://deb.having.coffee/debian contrib" | sudo tee /etc/apt/sources.list.d/having.coffee.list 
 wget -O - http://deb.having.coffee/debian/conf/ijt-repo.gpg.key | sudo apt-key add -
